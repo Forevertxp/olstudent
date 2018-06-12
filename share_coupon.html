@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>分享</title>
+    <link rel="stylesheet" href="css/share_coupon.css">
+    <script type="text/javascript" src="https://apps.bdimg.com/libs/zepto/1.1.4/zepto.min.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+</head>
+<body>
+<header class="hd">
+    <img src="img/icon_logo_aboutus@2x.png" alt="" class="hd-img"><span>创领荟</span>
+    <a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.chuanglead.app" class="hd-btn">立即下载</a>
+</header>
+<div class="content">
+    <div class="title"><span>优惠券已放入：</span><span id="phone"></span></div>
+    <div class="coupon">
+        <div class="coupon-detail">
+            <div class="coupon-title"><span class="coupon-price"></span><span>元</span><span class="coupon-text">订阅专栏立减券</span></div>
+            <div class="coupon-time"></div>
+            <div class="coupon-time coupon_disco"></div>
+        </div>
+        <div class="coupon-btn" onclick="download()">立即使用</div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+function download(){
+	window.location = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.chuanglead.app'
+}
+	var result = JSON.parse(sessionStorage.getItem('result'));
+	if(result){
+		$('.coupon-price').html(result.minus);
+		$('.coupon-time').html('有效期至：'+result.expireTime);
+		$('.coupon_disco').html('满'+result.total+'减'+result.minus);
+		$('#phone').html(result.phone)
+	}
+</script>
+</html>

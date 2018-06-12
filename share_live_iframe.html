@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no">
+    <title>直播</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="https://g.alicdn.com/de/prismplayer/2.6.0/skins/default/aliplayer-min.css">
+    <link rel="stylesheet" href="css/share_live_iframe.css">
+    <script type="text/javascript" src="https://apps.bdimg.com/libs/zepto/1.1.4/zepto.min.js"></script>
+    <script type="text/javascript" src="https://g.alicdn.com/de/prismplayer/2.6.0/aliplayer-min.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="js/moment-with-locales.min.js"></script>
+</head>
+<body >
+<div class="wrap">
+    <header class="hd" >
+        <img src="img/icon_logo_aboutus@2x.png" alt="" class="hd-img"><span>创领荟</span>
+        <a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.chuanglead.app" class="hd-btn">立即下载</a>
+    </header>
+    <!--<iframe src="http://cloud.quklive.com/cloud/a/embed/1522376211527753" frameborder="0" width="100%" height="100%" id="videoIframe"></iframe>-->
+    <div class="content">
+        <div class="pop">
+            <div class="outer">
+                <div class="inner">
+                    <div class="inner_item">距离直播开始还有</div>
+                    <div class="inner_item" id="time"></div>
+                </div>
+            </div>
+
+        </div>
+        <div  class="prism-player" id="J_prismPlayer" style="position: absolute"></div>
+    </div>
+
+</div>
+</body>
+<script type="text/javascript">
+    var LocString = String(window.document.location.href);
+    function getQueryStr(str) {
+        var rs = new RegExp("(^|)" + str + "=([^&]*)(&|$)", "gi").exec(LocString),
+                tmp;
+        if (tmp = rs) {
+            return tmp[2];
+        }
+        return "";
+    }
+
+    $.ajax({
+        url:'http://app.chuanglead.com/ola/cour/getLiveCourseDetail',
+        type:'get',
+        data:{courseId:getQueryStr('courseId')},
+        success: function (json) {
+            console.log(json)
+            if(json.apicode==10000){
+                console.log($('#live'));
+                var result = json.result;
+                if(result.videoList.length>0&&result.videoList[0].liveUrl){
+                    var player = new Aliplayer({
+                        id: 'J_prismPlayer',
+                        width: '100%',
+                        autoplay: false,
+                        //支持播放地址播放,此播放优先级最高
+                        source : result.videoList[0].liveUrl
+
+
+                    },function(player){
+                        console.log('播放器创建好了。')
+                    });
+                }else {
+                    var now =moment();
+                    var starTime =moment(result.onlineTime);
+                    $('.pop').css({display:'block',background:"url("+result.coursePic+") no-repeat",backgroundSize:'100% 100%'})
+                    if(starTime>now){
+                        $('#time').html(getTime(now,starTime));
+                    }
+                }
+            }
+        }
+    })
+//格式化时间
+    function getTime(a,b){
+        var diffTime = b.diff(a,'second');
+        var diffDay = parseInt(diffTime/(24*60*60));
+        var diffHour = parseInt((diffTime-diffDay*24*60*60)/(60*60));
+        var diffMinute = parseInt((diffTime-diffDay*24*60*60-diffHour*60*60)/60);
+        var diffSecond = parseInt(diffTime-diffDay*24*60*60-diffHour*60*60-diffMinute*60);
+        var str = ''
+        diffDay = diffDay>=10?diffDay:'0'+diffDay;
+        diffHour = diffHour>=10?diffHour:'0'+diffHour;
+        diffMinute = diffMinute>=10?diffMinute:'0'+diffMinute;
+        diffSecond = diffSecond>=10?diffSecond:'0'+diffSecond;
+        str +='<span class="time_label">'+diffDay+'</span><span class="time_label">天</span><span class="time_label">'+diffHour+'</span><span class="time_label">小时</span><span class="time_label">'+diffMinute+'</span><span class="time_label">分钟</span>' +
+                '<span class="time_label">'+diffSecond+'</span><span class="time_label">秒</span>';
+        return str;
+    }
+</script>
+</html>

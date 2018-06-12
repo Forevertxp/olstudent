@@ -1,0 +1,57 @@
+@rem:46.875rem;
+body,html{
+  padding: 0;
+  margin: 0;
+  font-size: 32/@rem;
+}
+.wrap{
+  width: 670/@rem;
+  padding-top: 60/@rem;
+  margin: 0 auto;
+  border-bottom: 1px solid #DEDEDE;
+  padding-bottom: 70/@rem;
+}
+/* 2倍屏 */
+@media only screen and (-webkit-min-device-pixel-ratio: 2.0) {
+  .wrap {
+    border-bottom: .5px solid #DEDEDE;
+  }
+}
+
+/* 3倍屏 */
+@media only screen and (-webkit-min-device-pixel-ratio: 3.0) {
+  .wrap {
+    border-bottom: .3333px solid #DEDEDE;
+  }
+}
+
+.title{
+  color: #D95C5C;
+  font-size: 34/@rem;
+  padding-bottom: 50/@rem;
+}
+.detail{
+  line-height: 54/@rem;
+  letter-spacing: 0;
+  color: #666666;
+  padding-right: 40/@rem;
+}
+.about{
+  width: 670/@rem;
+  margin: 0 auto;
+  padding-bottom: 20/@rem;
+}
+.about-title{
+  text-align: center;
+  padding: 40/@rem 0;
+}
+.about-logo{
+  margin:0 auto 30/@rem ;
+  width: 130/@rem;
+  height: 130/@rem;
+
+}
+.about-logo>img{
+  width: 100%;
+  height: 100%;
+}

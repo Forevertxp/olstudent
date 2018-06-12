@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>分享</title>
+    <link rel="stylesheet" href="css/share_user.css">
+    <script type="text/javascript" src="https://apps.bdimg.com/libs/zepto/1.1.4/zepto.min.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+</head>
+<body>
+<header class="hd">
+    <img src="img/icon_logo_aboutus@2x.png" alt="" class="hd-img"><span>创领荟</span>
+    <a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.chuanglead.app" class="hd-btn">立即下载</a>
+</header>
+<div class="content">
+    <div class="pop">本活动只限新用户参与</div>
+    <div class="title">* 新用户福利：输入手机号，领取优惠券 *</div>
+    <div class="input-wrap"><span class="input-before">+86</span><input type="text" placeholder="请输入手机号领取优惠券" id="phone"></div>
+    <div class="input-wrap"><input type="text" placeholder="请输入验证码" id="code"><input class="code-btn" type="button"  id="getCode" value="获取" /></div>
+</div>
+<div class="submit" id="submit"><a href="javascript:void (0);">立即领取</a></div>
+</body>
+<script type="text/javascript">
+    function getQueryStr(str) {
+        var rs = new RegExp("(^|)" + str + "=([^&]*)(&|$)", "gi").exec(window.location.href),
+                tmp;
+        if (tmp = rs) {
+            return tmp[2];
+        }
+        return "";
+    }
+    function isPhone(phone) {
+        var reg = /^1[3-8][0-9]{9}$/;
+        var isPhone = reg.test(phone);
+        return isPhone;
+    }
+    var isFirst = true;
+    $('#getCode').touchByM(function () {
+        if(!isFirst){
+            return;
+        }
+        var time = 60;
+        var that = this;
+        var phone = $('#phone').val().trim();
+        if(!isPhone(phone)){
+            alert('请输入正确手机号!');
+            return;
+        }
+        isFirst = false;
+        $.ajax({
+            url:'http://app.chuanglead.com/ola/user/getYzmByPhone',
+            data:{mobile:phone},
+            type:'get',
+            success:function (json) {
+                console.log(json);
+            }
+        });
+        var timer = setInterval(function () {
+            time--;
+            $(that).val(time+'(s)');
+            if(time==0){
+                isFirst = true;
+                clearInterval(timer);
+                $(that).val('获取');
+            }
+        },1000)
+    });
+    $('#submit').touchByM(function () {
+        var pop = $('.pop');
+        var phone = $('#phone').val().trim();
+        if(!isPhone(phone)){
+            alert('请输入正确手机号!');
+            return;
+        }
+        var code = $('#code').val().trim();
+        if(!code){
+            alert('请输入验证码!');
+            return;
+        }
+        $.ajax({
+            url:'http://app.chuanglead.com/ola/user/quickReg',
+            data:{
+                invitorId:getQueryStr('userId'),
+                phone:phone,
+                code:code
+            },
+            type:'post',
+            success:function (json) {
+                if(json.apicode==10000){
+				var result = json.result;
+				result.phone = phone;
+                	sessionStorage.setItem('result',JSON.stringify(result));
+                    window.location = 'share_coupon.html';
+                }	else {
+                		if(json.message==='验证码已过期'){
+                			pop.html('验证码已过期');
+                		}else{
+                			pop.html('本活动只限新用户参与');
+                		}
+                    pop.css({display:'block'});
+                    var timer =setTimeout(function () {
+                        pop.css({display:'none'});
+                        clearTimeout(timer);
+                    },500)
+                }
+            }
+        })
+    })
+</script>
+</html>

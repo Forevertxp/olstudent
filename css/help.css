@@ -1,0 +1,54 @@
+body,
+html {
+  padding: 0;
+  margin: 0;
+  font-size: 0.68266667rem;
+}
+.wrap {
+  width: 14.29333333rem;
+  padding-top: 1.28rem;
+  margin: 0 auto;
+  border-bottom: 1px solid #DEDEDE;
+  padding-bottom: 1.49333333rem;
+}
+/* 2倍屏 */
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+  .wrap {
+    border-bottom: .5px solid #DEDEDE;
+  }
+}
+/* 3倍屏 */
+@media only screen and (-webkit-min-device-pixel-ratio: 3) {
+  .wrap {
+    border-bottom: .3333px solid #DEDEDE;
+  }
+}
+.title {
+  color: #D95C5C;
+  font-size: 0.72533333rem;
+  padding-bottom: 1.06666667rem;
+}
+.detail {
+  line-height: 1.152rem;
+  letter-spacing: 0;
+  color: #666666;
+  padding-right: 0.85333333rem;
+}
+.about {
+  width: 14.29333333rem;
+  margin: 0 auto;
+  padding-bottom: 0.42666667rem;
+}
+.about-title {
+  text-align: center;
+  padding: 0.85333333rem 0;
+}
+.about-logo {
+  margin: 0 auto 0.64rem;
+  width: 2.77333333rem;
+  height: 2.77333333rem;
+}
+.about-logo > img {
+  width: 100%;
+  height: 100%;
+}
